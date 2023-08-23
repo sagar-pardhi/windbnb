@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export const Header = () => {
-  const [showSearchFilter, setShowSearchFilter] = useState(true);
+  const [showSearchFilter, setShowSearchFilter] = useState(false);
 
   return (
     <header className="flex flex-col md:flex-row md:justify-between gap-y-10">
@@ -20,7 +20,7 @@ export const Header = () => {
         <div
           className={`${
             showSearchFilter ? "block" : "hidden"
-          } fixed z-10 top-0 left-0 bg-white px-4 py-4 w-full`}
+          } fixed z-10 top-0 left-0 bg-white px-4 py-4 md:px-8 md:py-8 lg:px-16 lg:py-8 w-full`}
         >
           <div className="flex flex-col">
             <div className="flex justify-between mb-3">

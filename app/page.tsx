@@ -1,13 +1,17 @@
 import { Card } from "@/components/card";
 import { Stays } from "@/types";
 
-const getStaysData = async () => {
+interface StaysData {
+  staysData: Stays[];
+}
+
+const getStaysData = async (): Promise<StaysData> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stays`);
   const data = response.json();
   return data;
 };
 
-export default async function Home() {
+const Home = async () => {
   const data = await getStaysData();
 
   return (
@@ -24,4 +28,6 @@ export default async function Home() {
       </div>
     </section>
   );
-}
+};
+
+export default Home;
