@@ -32,7 +32,7 @@ export const Card: React.FC<CardProps> = ({
           )}
 
           <p className="text-xs lg:text-sm text-[#828282]">
-            {type} . {beds} beds
+            {type} {beds && `. ${beds} beds`}
           </p>
         </div>
         <div className="flex items-center gap-x-1">
