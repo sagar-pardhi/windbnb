@@ -3,9 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-interface HeaderProps {}
-
-export const Header: React.FC<HeaderProps> = () => {
+export const Header = () => {
   const [showSearchFilter, setShowSearchFilter] = useState(true);
 
   return (

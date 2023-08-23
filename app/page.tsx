@@ -2,7 +2,7 @@ import { Card } from "@/components/card";
 import { Stays } from "@/types";
 
 const getStaysData = async () => {
-  const response = await fetch("http://localhost:3000/api/stays");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stays`);
   const data = response.json();
   return data;
 };
