@@ -10,8 +10,6 @@ const getStaysData = async () => {
 export default async function Home() {
   const data = await getStaysData();
 
-  console.log(data);
-
   return (
     <section className="my-8">
       <div className="flex justify-between items-center">
