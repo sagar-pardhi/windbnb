@@ -5,13 +5,15 @@ interface StaysData {
   staysData: Stays[];
 }
 
-const getStaysData = async (): Promise<StaysData> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/stays`);
-  const data = response.json();
-  return data;
-};
-
 const Home = async () => {
+  const getStaysData = async (): Promise<StaysData> => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/stays`
+    );
+    const data = response.json();
+    return data;
+  };
+
   const data = await getStaysData();
 
   return (
