@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <section className="my-8">
       <div className="flex justify-between items-center">
-        <h2 className="font-bold text-xl">Stays in {staysData[0].country}</h2>
+        <h2 className="font-bold text-xl">Stays in {staysData[0]?.country}</h2>
         <span className="text-sm font-medium text-gray-500">
           {staysData.length}+ stays
         </span>
