@@ -1,10 +1,44 @@
 "use client";
 
+import { Stays } from "@/types";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Header = () => {
   const [showSearchFilter, setShowSearchFilter] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string | null>("");
+  const [suggestions, setSuggestions] = useState<Stays[]>([]);
+  const [filteredData, setFilteredData] = useState<Stays[]>([]);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch("/api/stays");
+      const data = await response.json();
+      setSuggestions(data);
+    }
+
+    getData();
+  }, []);
+
+  function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
+    const searchTerm = event.target.value;
+    setSearchTerm(searchTerm);
+
+    const filtered = suggestions
+      .filter(
+        (data, index, array) =>
+          array.findIndex(
+            (d) => d.city == data.city && d.country == data.country
+          ) == index
+      )
+      .filter(
+        (cityData) =>
+          cityData.city.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+          cityData.country.toLowerCase().startsWith(searchTerm.toLowerCase())
+      );
+
+    setFilteredData(filtered);
+  }
 
   return (
     <header className="flex flex-col md:flex-row md:justify-between gap-y-10">
@@ -20,7 +54,7 @@ export const Header = () => {
         <div
           className={`${
             showSearchFilter ? "block" : "hidden"
-          } fixed z-10 top-0 left-0 bg-white px-4 py-4 md:px-8 md:py-8 lg:px-16 lg:py-8 w-full`}
+          } fixed z-10 top-0 left-0 bg-white px-4 py-4 md:px-8 md:py-8 lg:px-16 lg:py-8 w-full overflow-auto`}
         >
           <div className="flex flex-col">
             <div className="flex justify-between mb-3">
@@ -51,7 +85,48 @@ export const Header = () => {
                     className="w-full px-2 appearance-none outline-none text-sm relative"
                     type="text"
                     defaultValue="Helsinki, Finland"
+                    onChange={(event) => handleSearch(event)}
+                    value={searchTerm!}
                   />
+
+                  {filteredData &&
+                    filteredData.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex px-2 py-3 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-x-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                            />
+                          </svg>
+
+                          <p
+                            className="text-sm "
+                            onClick={(e) =>
+                              setSearchTerm(e.currentTarget.textContent)
+                            }
+                          >
+                            {item.city}, Finland
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                 </div>
                 <div className="flex flex-col w-full">
                   <label className="px-2 text-xs font-bold">Guests</label>
