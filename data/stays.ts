@@ -1,4 +1,4 @@
-[
+export const data = [
   {
     "city": "Helsinki",
     "country": "Finland",
