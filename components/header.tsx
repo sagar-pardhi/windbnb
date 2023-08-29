@@ -1,9 +1,12 @@
 "use client";
 
-import { useAppContext } from "@/providers/context-provider";
-import { Stays } from "@/types";
+import { MagnifyingGlassIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { useState } from "react";
+
+import { useAppContext } from "@/providers/context-provider";
+import { Stays } from "@/types";
 
 export const Header = () => {
   const { staysData, setFilteredData } = useAppContext();
@@ -54,7 +57,6 @@ export const Header = () => {
       const response = await fetch(`/api/stays?${searchParams.toString()}`, {
         method: "GET",
       });
-      console.log(response);
       const data = await response.json();
       setFilteredData(data);
       setShowSearchFilter(false);
@@ -84,20 +86,7 @@ export const Header = () => {
             <div className="flex justify-between mb-3">
               <h3 className="text-sm font-bold">Edit your search</h3>
               <button onClick={() => setShowSearchFilter(false)}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <XMarkIcon className="w-6 h-6" />
               </button>
             </div>
 
@@ -121,26 +110,7 @@ export const Header = () => {
                             className="flex px-2 py-3 cursor-pointer"
                           >
                             <div className="flex items-center gap-x-3">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-4 h-4"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                                />
-                              </svg>
-
+                              <MapPinIcon className="w-4 h-4" />
                               <p
                                 className="text-sm "
                                 onClick={(e) => {
@@ -238,20 +208,7 @@ export const Header = () => {
                   className="bg-[#ea6565] rounded-xl px-4 py-2 text-white flex gap-x-3"
                   onClick={handleSubmit}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                    />
-                  </svg>
+                  <MagnifyingGlassIcon className="w-6 h-6" />
                   Search
                 </button>
               </div>
@@ -276,20 +233,7 @@ export const Header = () => {
             onClick={() => setShowSearchFilter(true)}
           />
           <button className="px-2" onClick={() => setShowSearchFilter(true)}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-6 h-6 text-red-500"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
+            <MagnifyingGlassIcon className="w-6 h-6 text-red-500" />
           </button>
         </div>
       </div>
