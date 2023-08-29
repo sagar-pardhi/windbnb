@@ -1,40 +1,29 @@
 "use client";
 
+import { useAppContext } from "@/providers/context-provider";
 import { Stays } from "@/types";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const Header = () => {
+  const { staysData, setFilteredData } = useAppContext();
+
   const [showSearchFilter, setShowSearchFilter] = useState(false);
   const [showLocationSuggestion, setShowLocationSuggestion] = useState(false);
   const [showGuestsOptions, setShowGuestsOptions] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string | null>("");
-  const [suggestions, setSuggestions] = useState<Stays[]>([]);
-  const [filteredData, setFilteredData] = useState<Stays[]>([]);
+  const [locationData, setLocationData] = useState<Stays[]>(staysData);
+  // const [filteredData, setFilteredData] = useState<Stays[]>([]);
   const [noOfGuests, setNoOfGuests] = useState(0);
   const [noOfAdults, setNoOfAdults] = useState(0);
   const [noOfChildrens, setNoOfChildrens] = useState(0);
-
-  useEffect(() => {
-    async function getData() {
-      const response = await fetch("/api/stays");
-      const data = await response.json();
-      setSuggestions(data);
-    }
-
-    getData();
-  }, []);
-
-  useEffect(() => {
-    setNoOfGuests(noOfAdults + noOfChildrens);
-  }, [noOfAdults, noOfChildrens]);
 
   function handleLocationSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const searchTerm = event.target.value;
     setSearchTerm(searchTerm);
     setShowLocationSuggestion(true);
 
-    const filtered = suggestions
+    const filtered = staysData
       .filter(
         (data, index, array) =>
           array.findIndex(
@@ -47,11 +36,31 @@ export const Header = () => {
           cityData.country.toLowerCase().startsWith(searchTerm.toLowerCase())
       );
 
-    setFilteredData(filtered);
+    setLocationData(filtered);
   }
 
-  function handleSubmit() {
-    console.log(searchTerm! + noOfAdults + noOfChildrens);
+  async function handleSubmit() {
+    const [city, country] = searchTerm?.split(",") ?? [];
+
+    const filterData = {
+      city: city,
+      country: country,
+      no_of_guests: "" + noOfGuests,
+    };
+
+    const searchParams = new URLSearchParams(filterData);
+
+    try {
+      const response = await fetch(`/api/stays?${searchParams.toString()}`, {
+        method: "GET",
+      });
+      console.log(response);
+      const data = await response.json();
+      setFilteredData(data);
+      setShowSearchFilter(false);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -61,7 +70,8 @@ export const Header = () => {
         width={100}
         height={100}
         alt="logo"
-        className="object-fit"
+        className="object-fit cursor-pointer"
+        onClick={() => setFilteredData(staysData)}
       />
       <div className="flex items-center">
         {/* Search Filter */}
@@ -104,8 +114,8 @@ export const Header = () => {
 
                   {showLocationSuggestion && (
                     <div className="overflow-auto h-[100px] md:h-fit">
-                      {filteredData &&
-                        filteredData.map((item, index) => (
+                      {locationData &&
+                        locationData.map((item, index) => (
                           <div
                             key={index}
                             className="flex px-2 py-3 cursor-pointer"
@@ -153,7 +163,7 @@ export const Header = () => {
                     className="w-full px-2 appearance-none outline-none text-sm"
                     type="number"
                     placeholder="Add Guests"
-                    value={noOfGuests}
+                    value={noOfGuests || noOfAdults + noOfChildrens}
                     onChange={(e) => {
                       setNoOfGuests(+e.target.value);
                       setShowGuestsOptions(true);
@@ -256,7 +266,7 @@ export const Header = () => {
           <input
             className="w-[50%] p-2 appearance-none rounded-l-xl outline-none border-r-2 text-center text-sm"
             type="text"
-            defaultValue="Helsinki, Finland"
+            placeholder="Helsinki, Finland"
             onClick={() => setShowSearchFilter(true)}
           />
           <input

@@ -25,7 +25,7 @@ export const Card: React.FC<CardProps> = ({
         <div className="flex items-center gap-x-3">
           {superHost && (
             <div className="border px-2 flex items-center py-1 rounded-full border-[#4f4f4f]">
-              <span className="text-xs tracking-tight font-bold text-[#4f4f4f] uppercase">
+              <span className="text-xs tracking-tight text-center font-bold text-[#4f4f4f] uppercase">
                 super host
               </span>
             </div>

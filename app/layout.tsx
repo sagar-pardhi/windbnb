@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
 import { Header } from "@/components/header";
+import { AppContextProvider } from "@/providers/context-provider";
 
 const lato = Lato({ weight: "400", subsets: ["latin"] });
 
@@ -19,10 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={lato.className}>
-        <Wrapper>
-          <Header />
-          {children}
-        </Wrapper>
+        <AppContextProvider>
+          <Wrapper>
+            <Header />
+            {children}
+          </Wrapper>
+        </AppContextProvider>
       </body>
     </html>
   );
